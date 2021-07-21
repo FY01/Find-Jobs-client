@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import App from "./App";
+
+import {Button} from "antd-mobile";
 
 ReactDom.render(
-    (<App/>),
+    (<Button type = "primary">hello react</Button>),
     document.getElementById('root')
 )
