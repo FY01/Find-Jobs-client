@@ -3,7 +3,10 @@
  * @author:
  * @date 2021/7/21
 */
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
+import {connect} from "react-redux";
+import PropTypes from 'prop-types'
+import {Redirect} from 'react-router-dom'
 import {
     NavBar,
     WingBlank,
@@ -11,12 +14,20 @@ import {
     Button,
     Radio,
     InputItem,
-    WhiteSpace
+    WhiteSpace,
 } from 'antd-mobile'
-import Logo from '../../components/Logo/Logo'
+
+import Logo from '../../components/logo/Logo'
+import {register} from "../../redux/actionCreator";
+import '../../assets/errroMsg.less'
+
 const Item = List.Item
 
-export default class Register extends Component {
+class Register extends PureComponent {
+    static propTypes = {
+        register:PropTypes.func.isRequired,
+        user:PropTypes.object
+    }
     state = {
         username:'',
         password:'',
@@ -40,15 +51,25 @@ export default class Register extends Component {
         this.props.history.replace('/login')
     }
     register = () => {
-
+        this.props.register(this.state)
     }
+
     render() {
         const {type} = this.state
+        const {msg,redirectTo} = this.props.user
+
+        if (redirectTo){
+            return (
+                <Redirect to = {redirectTo}>
+                </Redirect>
+            )
+        }
         return (
             <div>
                 <NavBar>刺&nbsp;客&nbsp;直&nbsp;聘</NavBar>
                 <Logo></Logo>
                 <WingBlank>
+                    {msg?<div className={"errorMsg"}><p>{msg}</p></div>:null}
                     <List>
                         <WhiteSpace/>
                         <InputItem placeholder={'敢问尊姓大名'} onChange={(val)=>{this.handleChange('username',val)}}>尊姓大名:</InputItem>
@@ -72,4 +93,8 @@ export default class Register extends Component {
         );
     }
 }
+export default connect(
+    state => ({user:state.user}),
+    {register}
+)(Register)
 

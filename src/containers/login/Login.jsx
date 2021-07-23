@@ -4,6 +4,8 @@
  * @date 2021/7/21
 */
 import React, {Component} from 'react';
+import {connect} from "react-redux";
+import PropTypes from 'prop-types'
 import {
     NavBar,
     WingBlank,
@@ -12,9 +14,16 @@ import {
     InputItem,
     WhiteSpace
 } from 'antd-mobile'
-import Logo from '../../components/Logo/Logo'
+import Logo from '../../components/logo/Logo'
+import {login} from "../../redux/actionCreator";
+import {Redirect} from "react-router-dom";
+import '../../assets/errroMsg.less'
 
-export default class Login extends Component {
+class Login extends Component {
+    static propTypes = {
+        login:PropTypes.func.isRequired,
+        user:PropTypes.object
+    }
     state = {
         username:'',
         password:'',
@@ -36,14 +45,22 @@ export default class Login extends Component {
         this.props.history.replace('/register')
     }
     login = () => {
-
+        this.props.login(this.state)
     }
     render() {
+        const {redirectTo,msg} = this.props.user
+        if (redirectTo){
+            return (
+                <Redirect to = {redirectTo}>
+                </Redirect>
+            )
+        }
         return (
             <div>
                 <NavBar>刺&nbsp;客&nbsp;直&nbsp;聘</NavBar>
                 <Logo></Logo>
                 <WingBlank>
+                    {msg?<div className={"errorMsg"}><p>{msg}</p></div>:null}
                     <List>
                         <WhiteSpace/>
                         <InputItem placeholder={'请输入尊姓大名'} onChange={(val)=>{this.handleChange('username',val)}}>尊姓大名:</InputItem>
@@ -60,3 +77,7 @@ export default class Login extends Component {
         );
     }
 }
+export default connect(
+    state => ({user:state.user}),
+    {login}
+)(Login)
