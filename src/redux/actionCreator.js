@@ -8,17 +8,27 @@
 */
 import {
     AUTH_SUCCESS,
-    ERROR_MSG
+    ERROR_MSG,
+    RECEIVE_USER,
+    RESET_USER
 } from "./actionType";
+import {validatePassword,validateUsername} from "../utils/validate";
 import {
     reqLogin,
-    reqRegister
+    reqRegister,
+    reqUpdateUser,
+    reqGetUser
 } from "../api";
 
 //async authSuccess action
 const authSuccess = (user) => ({type:AUTH_SUCCESS,data:user})
-//auth errorMsg action
+//async errorMsg action
 const errorMsg = (msg) => ({type:ERROR_MSG,data:msg})
+
+//async receiveUser action
+const receiveUser = (user) => ({type:RECEIVE_USER,data:user})
+//async resetUser action
+const resetUser = (msg) => ({type:RESET_USER,data:msg})
 
 
 /**
@@ -65,35 +75,39 @@ export const login = (user) => {
         const response = await reqLogin({username, password})
         const result = response.data  //  {code: 0/1, data: user, msg: ''}
         if (result.code === 0){
-            console.log(result)
             dispatch(authSuccess(result.data))
         }else{
             dispatch(errorMsg(result.msg))
         }
     }
 }
+/**
+ * sync update user action
+ * @param user
+ * @returns {function(*): Promise<void>}
+ */
+export const updateUser = (user) => {
+    return async dispatch => {
+        const response = await reqUpdateUser(user)
+        const result = response.data  //  {code: 0/1, data: user, msg: ''}
+        if (result.code === 0){
+            dispatch(receiveUser(result.data))
+        }else{
+            dispatch(resetUser(result.msg))
+        }
+    }
+}
 
-/**
- * validate username
- * @param username
- * @returns {boolean}
- */
-const validateUsername = (username) => {
-    if (!username || username.length > 12 || !/^[a-zA-Z0-9_]+$/.test(username)){
-        return false
-    }else {
-        return true
+export const getUser = () => {
+    return async dispatch => {
+        const response = await reqGetUser()
+        const result = response.data  //  {code: 0/1, data: user, msg: ''}
+        if (result.code === 0){
+            dispatch(receiveUser(result.data))
+        }else{
+            dispatch(resetUser(result.msg))
+        }
     }
 }
-/**
- * validate password
- * @param password
- * @returns {boolean}
- */
-const validatePassword = (password) => {
-    if (!password || password.length < 4 || password.length > 12 || !/^[a-zA-Z0-9_]+$/.test(password)){
-        return false
-    }else {
-        return true
-    }
-}
+
+

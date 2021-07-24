@@ -5,6 +5,7 @@
 */
 import React, {Component} from 'react';
 import {connect} from "react-redux";
+import {Redirect} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {
     List,
@@ -15,10 +16,12 @@ import {
 } from "antd-mobile";
 
 import HeaderSelector from "../../components/headerSelector/HeaderSelector";
+import {updateUser} from "../../redux/actionCreator";
 
 class LeaderInfo extends Component {
     static propTypes = {
-
+        user:PropTypes.object.isRequired,
+        updateUser:PropTypes.func.isRequired
     }
     state = {
         header: '',
@@ -39,7 +42,7 @@ class LeaderInfo extends Component {
     }
 
     save = () => {
-        console.log(this.state)
+        this.props.updateUser(this.state)
     }
     setHeader= (header) => {
         this.setState({
@@ -47,6 +50,11 @@ class LeaderInfo extends Component {
         })
     }
     render() {
+        const {header,task,info,company,type} = this.props.user
+        if (header || task || info || company){
+            const path = type === 'leader'?'/leader':'assassin'
+            return <Redirect to = {path}/>
+        }
         return (
             <List>
                 <NavBar>完 善 首 领 信 息</NavBar>
@@ -72,7 +80,7 @@ class LeaderInfo extends Component {
     }
 }
 export default connect(
-    state => ({}),
-    {}
+    state => ({user:state.user}),
+    {updateUser}
 )(LeaderInfo)
 
