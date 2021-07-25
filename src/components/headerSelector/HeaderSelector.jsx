@@ -24,7 +24,7 @@ export default class HeaderSelector extends Component {
         for (let i = 0;i < 20;i ++){
             this.headerList.push({
                 text:"header"+(i+1),
-                icon:require(`./headers/header${i+1}.png`)
+                icon:require(`../../assets/headers/header${i + 1}.png`)
             })
         }
     }
@@ -39,7 +39,7 @@ export default class HeaderSelector extends Component {
         this.setState({
             icon
         })
-        //parent component save header'info
+        //parent component save headers'info
         this.props.setHeader(text)
     }
 

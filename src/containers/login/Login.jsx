@@ -3,8 +3,8 @@
  * @author:
  * @date 2021/7/21
 */
-import React, {Component} from 'react';
-import {connect} from "react-redux";
+import React, {Component} from 'react'
+import {connect} from "react-redux"
 import PropTypes from 'prop-types'
 import {
     NavBar,
@@ -15,9 +15,8 @@ import {
     WhiteSpace
 } from 'antd-mobile'
 import Logo from '../../components/logo/Logo'
-import {login} from "../../redux/actionCreator";
-import {Redirect} from "react-router-dom";
-import '../../assets/errroMsg.less'
+import {login} from "../../redux/actionCreator"
+import {Redirect} from "react-router-dom"
 
 class Login extends Component {
     static propTypes = {
@@ -74,7 +73,7 @@ class Login extends Component {
                     </List>
                 </WingBlank>
             </div>
-        );
+        )
     }
 }
 export default connect(

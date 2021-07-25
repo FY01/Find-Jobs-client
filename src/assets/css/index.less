@@ -1,0 +1,36 @@
+
+//control header in user list
+.am-card-header-content {
+  img {
+    width: 60px;
+    height: 60px;
+  }
+}
+//control errorMsg
+.errorMsg {
+  color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+//control navFooter
+.am-tab-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: inherit;
+}
+
+//control NavBar
+.sticky-header {
+  z-index: 10;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+//fix a style bug in navFooter when scroll the screen
+.am-card-body::before{
+    background-color: transparent !important;
+}

@@ -19,7 +19,6 @@ import {
 
 import Logo from '../../components/logo/Logo'
 import {register} from "../../redux/actionCreator";
-import '../../assets/errroMsg.less'
 
 const Item = List.Item
 

@@ -8,15 +8,52 @@ import {Switch,Route,Redirect} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types'
 import Cookies from 'js-cookie'
+import {NavBar} from "antd-mobile";
 
 import LeaderInfo from "../lederInfo/LeaderInfo";
 import AssassinInfo from "../assassinInfo/AssassinInfo";
 import Assassin from "../assassin/Assassin";
 import Leader from "../leader/Leader";
+import Message from "../message/Message";
+import Personal from "../personal/Personal";
+import NotFound from "../../components/notFound/NotFound";
+import NavFooter from "../../components/navFooter/NavFooter";
+
 import getRedirectTo from "../../utils/getRedirectTo";
 import {getUser} from "../../redux/actionCreator";
 
 class Main extends Component {
+    navList = [ // include all the information about navRoute
+        {
+            path: '/leader', 
+            component: Leader,
+            title: '刺客列表',
+            icon: 'leader',
+            text: '领袖',
+        },
+        {
+            path: '/assassin', 
+            component: Assassin,
+            title: '领袖列表',
+            icon: 'assassin',
+            text: '刺客',
+        },
+        {
+            path: '/message', 
+            component: Message,
+            title: '消息列表',
+            icon: 'message',
+            text: '消息',
+        },
+        {
+            path: '/personal', 
+            component: Personal,
+            title: '用户中心',
+            icon: 'personal',
+            text: '个人',
+        }
+    ]
+    
     static propTypes = {
         user:PropTypes.object.isRequired,
         getUser:PropTypes.func
@@ -31,7 +68,7 @@ class Main extends Component {
     }
 
     render() {
-        let path = this.props.location.pathname
+
         const userId = Cookies.get('userId')
         // !userId => /login
         if (!userId){
@@ -44,6 +81,7 @@ class Main extends Component {
             return null
         // _id => Redirect to someWhere
         }else {
+            let path = this.props.location.pathname
             if (path === '/'){
                 path = getRedirectTo(type,header)
                 console.log(path)
@@ -51,12 +89,38 @@ class Main extends Component {
             }
         }
 
+        //find current nav
+        let {navList} = this
+        let path = this.props.location.pathname
+        const currentNav = navList.find(nav => nav.path === path)
+
+        //filter nav, if nav.hind=true,filter in the NavFooter
+        const {user} = this.props
+        if (currentNav){
+            if (user.type === 'leader'){
+                navList[1].hind = true
+            }else if (user.type === 'assassin'){
+                navList[0].hind = true
+            }
+        }
+
+
+
+
         return (
             <div>
+                {/*some Route does not need to show NavBar*/}
+                {currentNav?<NavBar className={'sticky-header'}>{currentNav.title}</NavBar>:null}
                 <Switch>
+                    {
+                        navList.map(nav => <Route path ={nav.path} key= {nav.path} component = {nav.component}/>)
+                    }
                     <Route path = '/assassinInfo' component = {AssassinInfo}/>
                     <Route path = '/leaderInfo' component = {LeaderInfo}/>
+                    <Route component = {NotFound}/>
                 </Switch>
+                {/*some Route does not need to show NavFooter*/}
+                {currentNav?<NavFooter navList = {navList}/>:null}
             </div>
         );
     }

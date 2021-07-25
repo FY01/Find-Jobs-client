@@ -9,8 +9,9 @@ import {
     ERROR_MSG,
     AUTH_SUCCESS,
     RESET_USER,
-    RECEIVE_USER
-} from "./actionType";
+    RECEIVE_USER,
+    RECEIVE_USER_LIST
+} from "./actionTypes";
 import getRedirectTo from "../utils/getRedirectTo";
 
 const initUser = {
@@ -41,9 +42,27 @@ function user(state = initUser,action){
     }
 }
 
+const initUserList = []
+
+/**
+ * manage userList state
+ * @param state
+ * @param action
+ * @returns {[]|*}
+ */
+function userList (state=initUserList,action){
+    switch (action.type){
+        case RECEIVE_USER_LIST:
+            return action.data  //action.date : [users]
+        default:
+            return state
+    }
+}
+
 
 export default combineReducers(
     {
-        user
+        user,
+        userList
     }
 )

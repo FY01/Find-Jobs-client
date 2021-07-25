@@ -10,14 +10,16 @@ import {
     AUTH_SUCCESS,
     ERROR_MSG,
     RECEIVE_USER,
-    RESET_USER
-} from "./actionType";
+    RESET_USER,
+    RECEIVE_USER_LIST
+} from "./actionTypes";
 import {validatePassword,validateUsername} from "../utils/validate";
 import {
     reqLogin,
     reqRegister,
     reqUpdateUser,
-    reqGetUser
+    reqGetUser,
+    reqGetUserList
 } from "../api";
 
 //async authSuccess action
@@ -28,7 +30,10 @@ const errorMsg = (msg) => ({type:ERROR_MSG,data:msg})
 //async receiveUser action
 const receiveUser = (user) => ({type:RECEIVE_USER,data:user})
 //async resetUser action
-const resetUser = (msg) => ({type:RESET_USER,data:msg})
+export const resetUser = (msg) => ({type:RESET_USER,data:msg})
+
+//async receiveUserList action
+const receiveUserList = (userList) => ({type:RECEIVE_USER_LIST,data:userList})
 
 
 /**
@@ -97,7 +102,10 @@ export const updateUser = (user) => {
         }
     }
 }
-
+/**
+ * sync get user action
+ * @returns {function(*): Promise<void>}
+ */
 export const getUser = () => {
     return async dispatch => {
         const response = await reqGetUser()
@@ -106,6 +114,20 @@ export const getUser = () => {
             dispatch(receiveUser(result.data))
         }else{
             dispatch(resetUser(result.msg))
+        }
+    }
+}
+/**
+ * sync get user list action
+ * @param type
+ * @returns {function(*): Promise<void>}
+ */
+export const getUserList = (type) => {
+    return async dispatch => {
+        const response = await reqGetUserList(type)
+        const result = response.data  //  result:{code: 0, data: users}
+        if (result.code === 0){
+            dispatch(receiveUserList(result.data))
         }
     }
 }
