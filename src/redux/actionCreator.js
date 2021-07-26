@@ -6,6 +6,8 @@
  * @author:
  * @date 2021/7/21
 */
+import io from 'socket.io-client'
+
 import {
     AUTH_SUCCESS,
     ERROR_MSG,
@@ -19,7 +21,7 @@ import {
     reqRegister,
     reqUpdateUser,
     reqGetUser,
-    reqGetUserList
+    reqGetUserList,
 } from "../api";
 
 //async authSuccess action
@@ -35,6 +37,29 @@ export const resetUser = (msg) => ({type:RESET_USER,data:msg})
 //async receiveUserList action
 const receiveUserList = (userList) => ({type:RECEIVE_USER_LIST,data:userList})
 
+/**
+ * single object
+ * 1: create an object if !object
+ * 2: save object after created
+ */
+function initIo (){
+    if (!io.socket){
+        io.socket = io('ws://localhost:4000')
+        io.socket.on('receiveMsg',(data) => {
+            console.log('浏览器接收到的消息',data)
+        })
+    }
+}
+
+export const sendMsg = ({from,to,content}) => {
+    return dispatch => {
+        console.log('浏览器发送的消息',{from,to,content})
+        initIo()
+        io.socket.emit('sendMsg',{from,to,content})
+    }
+}
+
+/****************************************************************************************/
 
 /**
  * sync register action
@@ -131,5 +156,7 @@ export const getUserList = (type) => {
         }
     }
 }
+
+
 
 

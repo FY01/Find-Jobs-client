@@ -18,10 +18,7 @@ class Leader extends Component {
         getUserList:PropTypes.func.isRequired
     }
     componentDidMount() {
-        let {type} = this.props.user
-        if (type === 'assassin') type = 'header'
-        if (type === 'header') type = 'assassin'
-        this.props.getUserList(type)
+        this.props.getUserList('assassin')
     }
     render() {
         const {userList} = this.props

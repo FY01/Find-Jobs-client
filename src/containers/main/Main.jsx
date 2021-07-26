@@ -18,6 +18,7 @@ import Message from "../message/Message";
 import Personal from "../personal/Personal";
 import NotFound from "../../components/notFound/NotFound";
 import NavFooter from "../../components/navFooter/NavFooter";
+import Chat from "../chat/Chat";
 
 import getRedirectTo from "../../utils/getRedirectTo";
 import {getUser} from "../../redux/actionCreator";
@@ -117,6 +118,10 @@ class Main extends Component {
                     }
                     <Route path = '/assassinInfo' component = {AssassinInfo}/>
                     <Route path = '/leaderInfo' component = {LeaderInfo}/>
+
+                    {/*path = '/chat/:userId'  ==> in Chat component,can get userId by this.props.match.params.userId*/}
+                    <Route path = '/chat/:userId' component = {Chat}/>
+
                     <Route component = {NotFound}/>
                 </Switch>
                 {/*some Route does not need to show NavFooter*/}

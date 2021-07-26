@@ -10,6 +10,7 @@ import Main from "./containers/main/Main";
 
 import './assets/css/index.less'
 
+// import './socketIo/socketIo'
 
 ReactDom.render(
     (<Provider store={store}>
