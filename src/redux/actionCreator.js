@@ -13,7 +13,9 @@ import {
     ERROR_MSG,
     RECEIVE_USER,
     RESET_USER,
-    RECEIVE_USER_LIST
+    RECEIVE_USER_LIST,
+    RECEIVE_MSG,
+    RECEIVE_MSG_LIST
 } from "./actionTypes";
 import {validatePassword,validateUsername} from "../utils/validate";
 import {
@@ -22,6 +24,8 @@ import {
     reqUpdateUser,
     reqGetUser,
     reqGetUserList,
+    reqGetChatList,
+    reqReadMsg
 } from "../api";
 
 //async authSuccess action
@@ -37,16 +41,27 @@ export const resetUser = (msg) => ({type:RESET_USER,data:msg})
 //async receiveUserList action
 const receiveUserList = (userList) => ({type:RECEIVE_USER_LIST,data:userList})
 
+//async receiveMsgList action
+const receiveMsgList = (users,chatMsgs) => ({type:RECEIVE_MSG_LIST,data:{users,chatMsgs}})
+
+//async receiveMsg action
+const receiveMsg = (chatMsg) => ({type:RECEIVE_MSG,data:{chatMsg}})
+
+
+
 /**
  * single object
  * 1: create an object if !object
  * 2: save object after created
  */
-function initIo (){
+function initIo (userId,dispatch){
     if (!io.socket){
         io.socket = io('ws://localhost:4000')
-        io.socket.on('receiveMsg',(data) => {
-            console.log('浏览器接收到的消息',data)
+        io.socket.on('receiveMsg',(chatMsg) => {
+            console.log('浏览器接收到的消息',chatMsg)
+            if (userId === chatMsg.from || userId === chatMsg.to){
+                dispatch(receiveMsg(chatMsg))
+            }
         })
     }
 }
@@ -54,12 +69,28 @@ function initIo (){
 export const sendMsg = ({from,to,content}) => {
     return dispatch => {
         console.log('浏览器发送的消息',{from,to,content})
-        initIo()
         io.socket.emit('sendMsg',{from,to,content})
     }
 }
 
 /****************************************************************************************/
+
+/**
+ * tool function : get chat list
+ * @param dispatch
+ * @returns {Promise<void>}
+ */
+async function getChatList(userId,dispatch){
+    initIo(userId,dispatch)
+    const response = await reqGetChatList()
+    const result = response.data  // {users:{},chatMsgs:[]}
+    if(result.code === 0){
+        const {users,chatMsgs} = result.data
+        // console.log(users,chatMsgs)
+        dispatch(receiveMsgList(users,chatMsgs))
+    }
+}
+
 
 /**
  * sync register action
@@ -81,7 +112,9 @@ export const register = (user) => {
         const response = await reqRegister({username, password, type})
         const result = response.data  //  {code: 0/1, data: user, msg: ''}
         if (result.code === 0){
+            // register success
             dispatch(authSuccess(result.data))
+            getChatList(result.data._id,dispatch)
         }else{
             dispatch(errorMsg(result.msg))
         }
@@ -105,7 +138,9 @@ export const login = (user) => {
         const response = await reqLogin({username, password})
         const result = response.data  //  {code: 0/1, data: user, msg: ''}
         if (result.code === 0){
+            // login success
             dispatch(authSuccess(result.data))
+            getChatList(result.data._id,dispatch)
         }else{
             dispatch(errorMsg(result.msg))
         }
@@ -136,7 +171,9 @@ export const getUser = () => {
         const response = await reqGetUser()
         const result = response.data  //  {code: 0/1, data: user, msg: ''}
         if (result.code === 0){
+            // updateUser success
             dispatch(receiveUser(result.data))
+            getChatList(result.data._id,dispatch)
         }else{
             dispatch(resetUser(result.msg))
         }

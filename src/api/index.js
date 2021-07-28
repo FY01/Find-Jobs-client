@@ -20,3 +20,11 @@ export const reqGetUser = () => ajax('/getUser')
 
 //get user list
 export const reqGetUserList = (type) => ajax('/userList',{type})
+
+//get chat list
+export const reqGetChatList = () => ajax('/msgList')
+
+//define mag read
+export const reqReadMsg = (from) => ajax('/readMsg',{from},'POST')
+
+

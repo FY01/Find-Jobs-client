@@ -29,8 +29,9 @@ class UserList extends Component {
                         <div key={user._id}>
                             <WhiteSpace/>
                             <Card onClick={() => {this.props.history.push(`/chat/${user._id}`)}}>
-                                {user.header?<Header thumb={require(`../../assets/headers/${user.header}.png`)} extra='' />:
-                                    <p>{user.type==='leader'?'--该领袖':'--该刺客'}隐藏头像</p>
+                                {user.header?
+                                    <Header thumb={require(`../../assets/headers/${user.header}.png`)} extra='' />:
+                                    <Header thumb={require( `../../assets/headers/doNotExist.png`)} extra='' />
                                 }
                                 <Body>
                                     <p>{user.type==='leader'?'领袖':'刺客'}: {user.username}</p>

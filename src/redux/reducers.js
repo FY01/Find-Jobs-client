@@ -10,7 +10,9 @@ import {
     AUTH_SUCCESS,
     RESET_USER,
     RECEIVE_USER,
-    RECEIVE_USER_LIST
+    RECEIVE_USER_LIST,
+    RECEIVE_MSG,
+    RECEIVE_MSG_LIST
 } from "./actionTypes";
 import getRedirectTo from "../utils/getRedirectTo";
 
@@ -59,10 +61,39 @@ function userList (state=initUserList,action){
     }
 }
 
+const initChat = {
+    users:{}, //   all users :   {userId:{}}
+    chatMsgs:[],  // current user chat msg [{}...]
+    unreadCount:0     //current user unread msg
+}
+
+
+function chat (state=initChat,action){
+    switch (action.type){
+        case RECEIVE_MSG_LIST:
+            const {users,chatMsgs} = action.data
+            return{
+                users,
+                chatMsgs,
+                unreadCount: 0
+            }
+        case RECEIVE_MSG:
+            const {chatMsg} = action.data
+            return {
+                users: state.users,
+                chatMsgs: [...state.chatMsgs,chatMsg],
+                unreadCount: 0
+            }
+        default:
+            return state
+    }
+}
+
 
 export default combineReducers(
     {
         user,
-        userList
+        userList,
+        chat
     }
 )

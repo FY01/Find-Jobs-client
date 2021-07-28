@@ -31,7 +31,7 @@
 }
 
 //fix a style bug in navFooter when scroll the screen
-.am-card-body::before{
+.am-card-body::before,.am-list-body::after{
     background-color: transparent !important;
 }
 
@@ -42,3 +42,12 @@
    padding-right: 15px;
    text-align: right;
  }
+ // clear line after chat input
+.am-list-line::after{
+  background-color: transparent !important;
+}
+
+//control icon height
+//ul.slider-list {
+//  height: 188px!important;
+//}
