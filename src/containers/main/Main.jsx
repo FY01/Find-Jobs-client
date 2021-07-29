@@ -57,6 +57,7 @@ class Main extends Component {
     
     static propTypes = {
         user:PropTypes.object.isRequired,
+        unreadCount:PropTypes.number.isRequired,
         getUser:PropTypes.func
     }
 
@@ -85,7 +86,6 @@ class Main extends Component {
             let path = this.props.location.pathname
             if (path === '/'){
                 path = getRedirectTo(type,header)
-                console.log(path)
                 return <Redirect to = {path}/>
             }
         }
@@ -96,7 +96,7 @@ class Main extends Component {
         const currentNav = navList.find(nav => nav.path === path)
 
         //filter nav, if nav.hind=true,filter in the NavFooter
-        const {user} = this.props
+        const {user,unreadCount} = this.props
         if (currentNav){
             if (user.type === 'leader'){
                 navList[1].hind = true
@@ -125,13 +125,13 @@ class Main extends Component {
                     <Route component = {NotFound}/>
                 </Switch>
                 {/*some Route does not need to show NavFooter*/}
-                {currentNav?<NavFooter navList = {navList}/>:null}
+                {currentNav?<NavFooter navList = {navList} unreadCount = {unreadCount}/>:null}
             </div>
         );
     }
 }
 export default connect(
-    state => ({user:state.user}),
+    state => ({user:state.user,unreadCount:state.chat.unreadCount}),
     {getUser}
 )(Main)
 

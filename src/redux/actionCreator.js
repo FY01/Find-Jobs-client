@@ -15,7 +15,8 @@ import {
     RESET_USER,
     RECEIVE_USER_LIST,
     RECEIVE_MSG,
-    RECEIVE_MSG_LIST
+    RECEIVE_MSG_LIST,
+    UPDATE_READ_MSG
 } from "./actionTypes";
 import {validatePassword,validateUsername} from "../utils/validate";
 import {
@@ -42,10 +43,13 @@ export const resetUser = (msg) => ({type:RESET_USER,data:msg})
 const receiveUserList = (userList) => ({type:RECEIVE_USER_LIST,data:userList})
 
 //async receiveMsgList action
-const receiveMsgList = (users,chatMsgs) => ({type:RECEIVE_MSG_LIST,data:{users,chatMsgs}})
+const receiveMsgList = (users,chatMsgs,userId) => ({type:RECEIVE_MSG_LIST,data:{users,chatMsgs,userId}})
 
 //async receiveMsg action
-const receiveMsg = (chatMsg) => ({type:RECEIVE_MSG,data:{chatMsg}})
+const receiveMsg = (chatMsg,userId) => ({type:RECEIVE_MSG,data:{chatMsg,userId}})
+
+//async updateReadMsg action
+const updateReadMsg = (from,to,updateCount) => ({type:UPDATE_READ_MSG,data:{from,to,updateCount}})
 
 
 
@@ -60,16 +64,34 @@ function initIo (userId,dispatch){
         io.socket.on('receiveMsg',(chatMsg) => {
             console.log('浏览器接收到的消息',chatMsg)
             if (userId === chatMsg.from || userId === chatMsg.to){
-                dispatch(receiveMsg(chatMsg))
+                dispatch(receiveMsg(chatMsg,userId))
             }
         })
     }
 }
 
+/**
+ * send msg
+ * @param from
+ * @param to
+ * @param content
+ * @returns {function(*): void}
+ */
 export const sendMsg = ({from,to,content}) => {
     return dispatch => {
         console.log('浏览器发送的消息',{from,to,content})
         io.socket.emit('sendMsg',{from,to,content})
+    }
+}
+
+export const readMsg = (from,to) => {
+    return async dispatch => {
+        const response = await reqReadMsg(from)
+        const result = response.data
+        if (result.code === 0){
+            const updateCount = result.data
+            dispatch(updateReadMsg(from,to,updateCount))
+        }
     }
 }
 
@@ -87,7 +109,7 @@ async function getChatList(userId,dispatch){
     if(result.code === 0){
         const {users,chatMsgs} = result.data
         // console.log(users,chatMsgs)
-        dispatch(receiveMsgList(users,chatMsgs))
+        dispatch(receiveMsgList(users,chatMsgs,userId))
     }
 }
 

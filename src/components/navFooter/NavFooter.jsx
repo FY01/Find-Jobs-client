@@ -16,7 +16,7 @@ class NavFooter extends Component {
     }
     render() {
         //filter navList
-        let {navList} = this.props
+        let {navList,unreadCount} = this.props
         const newNavList = navList.filter(nav => !nav.hind)
 
         const path = this.props.location.pathname
@@ -25,6 +25,7 @@ class NavFooter extends Component {
                 {
                     newNavList.map((nav) => (
                         <Item
+                            badge={nav.path === '/message'?unreadCount:0}
                             key ={nav.path}
                             title={nav.text}
                             icon={{uri:require(`./navIcons/${nav.icon}.png`)}}

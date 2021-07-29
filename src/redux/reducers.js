@@ -12,7 +12,7 @@ import {
     RECEIVE_USER,
     RECEIVE_USER_LIST,
     RECEIVE_MSG,
-    RECEIVE_MSG_LIST
+    RECEIVE_MSG_LIST, UPDATE_READ_MSG
 } from "./actionTypes";
 import getRedirectTo from "../utils/getRedirectTo";
 
@@ -71,18 +71,31 @@ const initChat = {
 function chat (state=initChat,action){
     switch (action.type){
         case RECEIVE_MSG_LIST:
-            const {users,chatMsgs} = action.data
+            const {users,chatMsgs,userId} = action.data
             return{
                 users,
                 chatMsgs,
-                unreadCount: 0
+                unreadCount: chatMsgs.reduce((totalCount,msg) => (totalCount +(!msg.read&&msg.to===userId?1:0)),0)
             }
         case RECEIVE_MSG:
             const {chatMsg} = action.data
             return {
                 users: state.users,
                 chatMsgs: [...state.chatMsgs,chatMsg],
-                unreadCount: 0
+                unreadCount: state.unreadCount + (!chatMsg.read&&chatMsg.to===action.data.userId?1:0)
+            }
+        case UPDATE_READ_MSG:
+            const {from, to, updateCount} = action.data
+            return {
+                users: state.users,
+                chatMsgs: state.chatMsgs.map(msg => {
+                    if (msg.to === to && msg.from === from && !msg.read){
+                        return {...msg,read:true}
+                    }else {
+                        return msg
+                    }
+                }),
+                unreadCount: state.unreadCount - updateCount
             }
         default:
             return state
