@@ -35,10 +35,19 @@
     background-color: transparent !important;
 }
 
-/*chat's style*/
-#chat-page .chat-me .am-list-extra {
-  flex-basis: auto; /*宽度包裹内容*/
-}#chat-page .chat-me .am-list-content {
+/*style of message from user */
+#chat-page .chat-me {
+  flex-direction:row-reverse;
+  .am-list-line {
+    padding-right: 0;
+  }
+  .am-list-extra {
+    flex-basis: auto; /*宽度包裹内容*/
+  }
+}
+
+
+#chat-page .chat-me .am-list-content {
    padding-right: 15px;
    text-align: right;
  }

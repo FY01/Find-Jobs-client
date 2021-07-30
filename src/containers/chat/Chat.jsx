@@ -98,13 +98,21 @@ class Chat extends Component {
         }
 
         //find the other header/username
-        const headerName = users[targetId].header
+        const targetHeaderName = users[targetId].header
         const username = users[targetId].username
-        let header
-        if (headerName){
-            header = require( `../../assets/headers/${headerName}.png`)
+        let targetHeader
+        if (targetHeaderName){
+            targetHeader = require( `../../assets/headers/${targetHeaderName}.png`)
         }else {
-            header = require( `../../assets/headers/doNotExist.png`)
+            targetHeader = require( `../../assets/headers/doNotExist.png`)
+        }
+
+        const myHeaderName = users[myId].header
+        let myHeader
+        if (myHeaderName){
+            myHeader = require( `../../assets/headers/${myHeaderName}.png`)
+        }else {
+            myHeader = require( `../../assets/headers/doNotExist.png`)
         }
 
         return (
@@ -120,10 +128,10 @@ class Chat extends Component {
                     {
                         targetMsgs.map((msg) => {
                             if (msg.to !== targetId){
-                                return <Item thumb={header} key ={msg._id}> {msg.content} </Item>
+                                return <Item thumb={targetHeader} key ={msg._id}> {msg.content} </Item>
                             }else {
-                                // todo how to add my header?
-                                return <Item className='chat-me' extra={'me'} key ={msg._id}> {msg.content} </Item>
+                                //  how to add my header?  fix:  use flex-direction: row-reverse
+                                return <Item className='chat-me' thumb={myHeader} key ={msg._id}> {msg.content} </Item>
                             }
                         })
                     }
