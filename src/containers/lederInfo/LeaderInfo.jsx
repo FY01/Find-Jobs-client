@@ -41,38 +41,56 @@ class LeaderInfo extends Component {
         })
     }
 
+    //save update info
     save = () => {
         this.props.updateUser(this.state)
+        this.props.history.replace('/leader')
+    }
+    //cancel update info
+    cancel = () => {
+        this.props.history.replace('/personal')
     }
     setHeader= (header) => {
         this.setState({
             header
         })
     }
-    render() {
-        const {header,task,info,company,type} = this.props.user
-        if (header || task || info || company){
-            const path = type === 'leader'?'/leader':'assassin'
-            return <Redirect to = {path}/>
+
+    //save state when will mount
+    UNSAFE_componentWillMount() {
+        const {user} = this.props
+        const {header,task,info,company,salary} = user
+        if (user){
+            this.setState({
+                header,task,info,company,salary
+            })
         }
+    }
+
+    render() {
+        const {header,task,info,company,salary} = this.state
+
         return (
             <List>
                 <NavBar>完 善 首 领 信 息</NavBar>
                 <WingBlank>
-                    <HeaderSelector setHeader = {this.setHeader}/>
+                    <HeaderSelector setHeader = {this.setHeader} header = {header}/>
                     <WhiteSpace/><WhiteSpace/><WhiteSpace/><WhiteSpace/>
-                    <InputItem placeholder={'请输入招聘任务'} onChange={(val)=>{this.handleChange('task',val)}}>招聘任务:</InputItem>
+                    <InputItem placeholder={'请发布任务'} value={task} onChange={(val)=>{this.handleChange('task',val)}}>发布任务:</InputItem>
                     <WhiteSpace/>
-                    <InputItem placeholder={'请输入组织名称'} onChange={(val)=>{this.handleChange('company',val)}}>组织名称:</InputItem>
+                    <InputItem placeholder={'请输入组织名称'} value = {company} onChange={(val)=>{this.handleChange('company',val)}}>组织名称:</InputItem>
                     <WhiteSpace/>
-                    <InputItem placeholder={'请输入佣金待遇'} onChange={(val)=>{this.handleChange('salary',val)}}>佣金待遇:</InputItem>
+                    <InputItem placeholder={'请输入赏金金额'} value = {salary} onChange={(val)=>{this.handleChange('salary',val)}}>赏金金额:</InputItem>
                     <WhiteSpace/>
                     <TextareaItem
-                        title={'职位要求:'}
+                        title={'任务要求:'}
+                        value={info}
                         rows={3}
                         onChange={(val)=>{this.handleChange('info',val)}}
                     >
                     </TextareaItem>
+                    <Button type={'ghost'} onClick={this.cancel}>取消修改</Button>
+                    <WhiteSpace/>
                     <Button type={'primary'} onClick={this.save}>保存</Button>
                 </WingBlank>
             </List>

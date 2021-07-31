@@ -29,6 +29,7 @@ class AssassinInfo extends Component {
         header: '',
         task: '',
         info: '',
+        salary:''
     }
     /**
      * handle input's onChange event,collect state's information
@@ -42,28 +43,38 @@ class AssassinInfo extends Component {
     }
     save = () => {
         this.props.updateUser(this.state)
+        this.props.history.replace('/assassin')
     }
+
     setHeader= (header) => {
         this.setState({
             header
         })
     }
-    render() {
-        const {header,task,info,type} = this.props.user
-        if (header || task || info ){
-            const path = type === 'leader'?'/leader':'assassin'
-            return <Redirect to = {path}/>
+
+    UNSAFE_componentWillMount() {
+        const {user} = this.props
+        const {header,task,info,salary} = user
+        if (user){
+            this.setState({
+                header,task,info,salary
+            })
         }
+    }
+    render() {
+        const {header,task,info,salary} = this.state
         return (
             <List>
                 <NavBar>完 善 刺 客 信 息</NavBar>
                 <WingBlank>
-                    <HeaderSelector setHeader = {this.setHeader}/>
+                    <HeaderSelector setHeader = {this.setHeader} header = {header}/>
                     <WhiteSpace/><WhiteSpace/><WhiteSpace/><WhiteSpace/>
-                    <InputItem placeholder={'请输入佣金任务'} onChange={(val)=>{this.handleChange('task',val)}}>佣金任务:</InputItem>
+                    <InputItem placeholder={'请输入目标任务'} value={task} onChange={(val)=>{this.handleChange('task',val)}}>目标任务:</InputItem>
+                    <InputItem placeholder={'请输入目标赏金'} value={salary} onChange={(val)=>{this.handleChange('salary',val)}}>目标赏金:</InputItem>
                     <WhiteSpace/>
                     <TextareaItem
                         title={'自我介绍:'}
+                        value={info}
                         rows={3}
                         onChange={(val)=>{this.handleChange('info',val)}}
                     >

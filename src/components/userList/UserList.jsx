@@ -25,26 +25,30 @@ class UserList extends Component {
 
         return (
             <WingBlank style={{marginBottom:50,marginTop:50}}>
-                <QueueAnim type={'scale'} duration={'1000'}>
+                <QueueAnim type={'scale'} duration={'300'}>
                     {
-                        userList.map(user => (
-                            <div key={user._id}>
-                                <WhiteSpace/>
-                                <Card onClick={() => {this.props.history.push(`/chat/${user._id}`)}}>
-                                    {user.header?
-                                        <Header thumb={require(`../../assets/headers/${user.header}.png`)} extra='' />:
-                                        <Header thumb={require( `../../assets/headers/doNotExist.png`)} extra='' />
-                                    }
-                                    <Body>
-                                        <p>{user.type==='leader'?'领袖':'刺客'}: {user.username}</p>
-                                        <p>职位: {user.task}</p>
-                                        {user.company?<p>组织: {user.company}</p>:null}
-                                        {user.salary?<p>佣金: {user.salary}</p>:null}
-                                        <p>描述: {user.info}</p>
-                                    </Body>
-                                </Card>
-                            </div>
-                        ))
+                        userList.map(user => {
+                            const {_id,type,task,company,salary,info,header,username} = user
+                            return (
+                                <div key={_id}>
+                                    <WhiteSpace/>
+                                    <Card onClick={() => {this.props.history.push(`/chat/${_id}`)}}>
+                                        {header?
+                                            <Header thumb={require(`../../assets/headers/${header}.png`)} extra='' />:
+                                            <Header thumb={require( `../../assets/headers/doNotExist.png`)} extra='' />
+                                        }
+                                        <Body>
+                                            <p>{type==='leader'?'领袖':'刺客'}: {username}</p>
+                                            <p>{type==='leader'?'赏金任务':'目标任务'}: {task}</p>
+                                            {type==='leader'?<p>所属组织:{company}</p>:null}
+                                            <p>{type==='leader'?'发布赏金':'目标赏金'}: {salary}</p>
+                                            <p>{type==='leader'?'任务要求':'能力介绍'}: {info}</p>
+                                        </Body>
+                                    </Card>
+                                </div>
+                                )
+
+                        })
                     }
                 </QueueAnim>
 

@@ -15,7 +15,8 @@ export default class HeaderSelector extends Component {
         setHeader:PropTypes.func.isRequired
     }
     state = {
-        icon:null
+        icon:null,
+        header:''
     }
     constructor(props) {
         super(props);
@@ -29,6 +30,7 @@ export default class HeaderSelector extends Component {
         }
     }
 
+
     /**
      *
      * @param text
@@ -37,15 +39,44 @@ export default class HeaderSelector extends Component {
     handleClick = ({text,icon}) => {
         //update state
         this.setState({
-            icon
+            icon,
+            header:''
         })
         //parent component save headers'info
         this.props.setHeader(text)
     }
 
+    componentDidMount() {
+        const {header} = this.props
+        if (header){
+            this.setState({header})
+        }
+    }
+
     render() {
-        const {icon} = this.state
-        const renderHeader = !icon?'请选择头像':(
+        const {icon,header} = this.state
+
+        if (header){
+            let renderHeader = (
+                <div>
+                    已使用头像：<img style={{height:50,width:50}} src={require( `../../assets/headers/${header}.png`)} alt="header"/>
+                </div>
+            )
+            return (
+                <List
+                    renderHeader={renderHeader}
+                >
+                    <Grid
+                        data={this.headerList}
+                        columnNum={5}
+                        onClick={this.handleClick}
+                    >
+                    </Grid>
+                </List>
+            )
+        }
+
+        let renderHeader = !icon?'请选择头像':(
             <div>
                 已选择头像：<img style={{height:50,width:50}} src={icon} alt="header"/>
             </div>
@@ -61,7 +92,7 @@ export default class HeaderSelector extends Component {
                 >
                 </Grid>
             </List>
-        );
+        )
     }
 }
 

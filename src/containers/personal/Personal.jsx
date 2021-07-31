@@ -25,6 +25,16 @@ class Personal extends Component {
         user:PropTypes.object.isRequired
     }
 
+    update = () => {
+        const  type = this.props.user.type
+        if (type === 'leader'){
+            this.props.history.push('/leaderInfo')
+        }else{
+            this.props.history.push('/assassinInfo')
+        }
+
+    }
+
     logout = () => {
         Modal.alert('退出','退出登陆吗？',[
             {
@@ -42,7 +52,7 @@ class Personal extends Component {
         ])
     }
     render() {
-        const {username, info, header, company, task, salary} = this.props.user
+        const {username, info, header, company, task, salary,type} = this.props.user
         return (
             <div style={{marginBottom:50, marginTop:50}}>
                 <Result
@@ -53,13 +63,16 @@ class Personal extends Component {
 
                 <List renderHeader={() => '相关信息'}>
                     <Item multipleLine>
-                        <Brief>任务: {task}</Brief>
-                        <Brief>简介: {info}</Brief>
-                        {salary ? <Brief>佣金: {salary}</Brief> : null}
+                        {type==='leader'?<Brief>所属组织: {company}</Brief>:null}
+                        {type==='leader'?<Brief>已发布任务: {task}</Brief>:<Brief>寻找任务: {task}</Brief>}
+                        {type==='leader'?<Brief>任务要求: {info}</Brief>:<Brief>能力介绍: {task}</Brief>}
+                        {type==='leader'?<Brief>赏金金额: {salary}</Brief>:<Brief>目标赏金: {salary}</Brief>}
                     </Item>
                 </List>
                 <WhiteSpace/>
                 <List>
+                    <Button type='primary' onClick={this.update}>更新信息</Button>
+                    <WhiteSpace/>
                     <Button type='warning' onClick={this.logout}>退出登录</Button>
                 </List>
             </div>
