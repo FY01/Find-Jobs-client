@@ -56,7 +56,10 @@ class Personal extends Component {
         return (
             <div style={{marginBottom:50, marginTop:50}}>
                 <Result
-                    img={<img src={require(`../../assets/headers/${header}.png`)} style={{width: 50}} alt="header"/>}
+                    img={header?
+                        <img src={require(`../../assets/headers/${header}.png`)} style={{width: 50}} alt="header"/>:
+                        <img src={require(`../../assets/headers/doNotExist.png`)} style={{width: 50}} alt="header"/>
+                    }
                     title={username}
                     message={company}
                 />

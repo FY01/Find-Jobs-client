@@ -5,7 +5,6 @@
 */
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Redirect} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {
     List,
@@ -41,9 +40,14 @@ class AssassinInfo extends Component {
             [propName]:val
         })
     }
+    //save update info
     save = () => {
         this.props.updateUser(this.state)
         this.props.history.replace('/assassin')
+    }
+    //cancel update info
+    cancel = () => {
+        this.props.history.replace('/personal')
     }
 
     setHeader= (header) => {
@@ -79,6 +83,8 @@ class AssassinInfo extends Component {
                         onChange={(val)=>{this.handleChange('info',val)}}
                     >
                     </TextareaItem>
+                    <WhiteSpace/>
+                    <Button type={'ghost'} onClick={this.cancel}>取消修改</Button>
                     <WhiteSpace/>
                     <Button type={'primary'} onClick={this.save}>保存</Button>
                 </WingBlank>

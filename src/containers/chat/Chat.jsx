@@ -158,7 +158,7 @@ class Chat extends Component {
                                 carouselMaxRow={4}
                                 isCarousel={true}
                                 onClick={(Item => {
-                                    //todo
+                                    //todo how to insert a emoji between words？？？
                                     this.setState({content:this.state.content + Item.text})
                                 })}
                             />:null
