@@ -12,6 +12,9 @@
 
 **Usage**
 
-1.install: _npm i_
+
+1.download the server and start it : _https://github.com/FY01/Find-Jobs-server_
+
+2.install client dependencies: _npm i_
 
 2.run: _npm start_
