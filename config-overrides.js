@@ -1,4 +1,13 @@
-const {injectBabelPlugin, getLoader} = require('react-app-rewired');
+/*
+ * @Descripttion: 
+ * @version: 
+ * @@Company: 
+ * @Author: FY01
+ * @Date: 2022-02-20 13:45:24
+ * @LastEditors: 
+ * @LastEditTime: 2022-02-20 14:22:47
+ */
+const { injectBabelPlugin, getLoader } = require('react-app-rewired');
 
 const fileLoaderMatcher = function (rule) {
     return rule.loader && rule.loader.indexOf(`file-loader`) != -1;

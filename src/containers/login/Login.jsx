@@ -1,10 +1,15 @@
-/**
- * @Description: login component
- * @author:
- * @date 2021/7/21
-*/
-import React, {Component} from 'react'
-import {connect} from "react-redux"
+/*
+ * @Descripttion: 
+ * @version: 
+ * @@Company: 
+ * @Author: FY01
+ * @Date: 2022-02-20 13:45:24
+ * @LastEditors: 
+ * @LastEditTime: 2022-02-20 14:21:27
+ */
+
+import React, { Component } from 'react'
+import { connect } from "react-redux"
 import PropTypes from 'prop-types'
 import {
     NavBar,
@@ -15,26 +20,26 @@ import {
     WhiteSpace
 } from 'antd-mobile'
 import Logo from '../../components/logo/Logo'
-import {login} from "../../redux/actionCreator"
-import {Redirect} from "react-router-dom"
+import { login } from "../../redux/actionCreator"
+import { Redirect } from "react-router-dom"
 
 class Login extends Component {
     static propTypes = {
-        login:PropTypes.func.isRequired,
-        user:PropTypes.object
+        login: PropTypes.func.isRequired,
+        user: PropTypes.object
     }
     state = {
-        username:'',
-        password:'',
+        username: '',
+        password: '',
     }
     /**
      * handle input's onChange event,collect state's information
      * @param propName
      * @param val
      */
-    handleChange = (propName,val) => {
+    handleChange = (propName, val) => {
         this.setState({
-            [propName]:val
+            [propName]: val
         })
     }
     /**
@@ -47,10 +52,10 @@ class Login extends Component {
         this.props.login(this.state)
     }
     render() {
-        const {redirectTo,msg} = this.props.user
-        if (redirectTo){
+        const { redirectTo, msg } = this.props.user
+        if (redirectTo) {
             return (
-                <Redirect to = {redirectTo}>
+                <Redirect to={redirectTo}>
                 </Redirect>
             )
         }
@@ -59,16 +64,16 @@ class Login extends Component {
                 <NavBar>刺&nbsp;客&nbsp;直&nbsp;聘</NavBar>
                 <Logo></Logo>
                 <WingBlank>
-                    {msg?<div className={"errorMsg"}><p>{msg}</p></div>:null}
+                    {msg ? <div className={"errorMsg"}><p>{msg}</p></div> : null}
                     <List>
-                        <WhiteSpace/>
-                        <InputItem placeholder={'请输入尊姓大名'} onChange={(val)=>{this.handleChange('username',val)}}>尊姓大名:</InputItem>
-                        <WhiteSpace/>
-                        <InputItem type={'password'} placeholder={'请输入通关暗语'} onChange={(val)=>{this.handleChange('password',val)}}>通关暗语:</InputItem>
-                        <WhiteSpace/>
+                        <WhiteSpace />
+                        <InputItem placeholder={'请输入尊姓大名'} onChange={(val) => { this.handleChange('username', val) }}>尊姓大名:</InputItem>
+                        <WhiteSpace />
+                        <InputItem type={'password'} placeholder={'请输入通关暗语'} onChange={(val) => { this.handleChange('password', val) }}>通关暗语:</InputItem>
+                        <WhiteSpace />
 
                         <Button type={'primary'} onClick={this.login}>登录组织</Button>
-                        <WhiteSpace/>
+                        <WhiteSpace />
                         <Button onClick={this.register}>注册名号</Button>
                     </List>
                 </WingBlank>
@@ -77,6 +82,6 @@ class Login extends Component {
     }
 }
 export default connect(
-    state => ({user:state.user}),
-    {login}
+    state => ({ user: state.user }),
+    { login }
 )(Login)

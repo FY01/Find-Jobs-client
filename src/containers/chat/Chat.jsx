@@ -1,10 +1,6 @@
-/**
- * @Description: Chat component
- * @author:
- * @date 2021/7/26
-*/
-import React, {Component} from 'react';
-import {connect} from "react-redux";
+
+import React, { Component } from 'react';
+import { connect } from "react-redux";
 import Proptypes from 'prop-types'
 import {
     NavBar,
@@ -14,21 +10,21 @@ import {
     Icon
 } from "antd-mobile";
 
-import {sendMsg,readMsg  } from '../../redux/actionCreator'
+import { sendMsg, readMsg } from '../../redux/actionCreator'
 import emojis from "./emojis";
 
 const Item = List.Item
 
 class Chat extends Component {
     static propTypes = {
-        user:Proptypes.object.isRequired,
-        chat:Proptypes.object.isRequired,
-        sendMsg:Proptypes.func.isRequired,
-        readMsg:Proptypes.func.isRequired
+        user: Proptypes.object.isRequired,
+        chat: Proptypes.object.isRequired,
+        sendMsg: Proptypes.func.isRequired,
+        readMsg: Proptypes.func.isRequired
     }
     state = {
-        content:'',
-        isShowIcon:false
+        content: '',
+        isShowIcon: false
     }
 
     //seng msg
@@ -37,63 +33,63 @@ class Chat extends Component {
         const from = this.props.user._id
         const to = this.props.match.params.userId
         const content = this.state.content.trim()
-        if (content){
-            this.props.sendMsg({from,to,content})
+        if (content) {
+            this.props.sendMsg({ from, to, content })
         }
         //clear input after send msg (state)
-        this.setState({content:'',isShowIcon:false})
+        this.setState({ content: '', isShowIcon: false })
     }
 
     // show icon
     toggleShowIcon = () => {
         const isShowIcon = !this.state.isShowIcon
-        this.setState({isShowIcon})
+        this.setState({ isShowIcon })
         setTimeout(() => {
             window.dispatchEvent(new Event('resize'))
-        },0)
+        }, 0)
     }
 
 
     UNSAFE_componentWillMount() {
-        this.emojis = emojis.map(emoji => ({text: emoji}))
+        this.emojis = emojis.map(emoji => ({ text: emoji }))
     }
     // to the bottom when come in and send msg
     componentDidMount() {
         //keep last mag in the screen bottom
-        window.scrollTo(0,document.body.scrollHeight)
+        window.scrollTo(0, document.body.scrollHeight)
 
         // send req to update unread msg to be read
         const to = this.props.user._id
         const from = this.props.match.params.userId
-        this.props.readMsg(from,to)
+        this.props.readMsg(from, to)
     }
     componentDidUpdate() {
         //keep last mag in the screen bottom
-        window.scrollTo(0,document.body.scrollHeight)
+        window.scrollTo(0, document.body.scrollHeight)
     }
 
     componentWillUnmount() {
         // send req to update unread msg to be read
         const to = this.props.user._id
         const from = this.props.match.params.userId
-        this.props.readMsg(from,to)
+        this.props.readMsg(from, to)
     }
 
 
 
     render() {
-        const {user,chat} = this.props
-        const {users,chatMsgs} = chat
-        const {isShowIcon} = this.state
+        const { user, chat } = this.props
+        const { users, chatMsgs } = chat
+        const { isShowIcon } = this.state
 
 
         // find target msgs
         const myId = user._id
         const targetId = this.props.match.params.userId
-        const chatId = [myId,targetId].sort().join('_')
+        const chatId = [myId, targetId].sort().join('_')
         const targetMsgs = chatMsgs.filter(msg => msg.chat_id === chatId)
 
-        if (!users[myId]){
+        if (!users[myId]) {
             return null
         }
 
@@ -101,37 +97,37 @@ class Chat extends Component {
         const targetHeaderName = users[targetId].header
         const username = users[targetId].username
         let targetHeader
-        if (targetHeaderName){
-            targetHeader = require( `../../assets/headers/${targetHeaderName}.png`)
-        }else {
-            targetHeader = require( `../../assets/headers/doNotExist.png`)
+        if (targetHeaderName) {
+            targetHeader = require(`../../assets/headers/${targetHeaderName}.png`)
+        } else {
+            targetHeader = require(`../../assets/headers/doNotExist.png`)
         }
 
         const myHeaderName = users[myId].header
         let myHeader
-        if (myHeaderName){
-            myHeader = require( `../../assets/headers/${myHeaderName}.png`)
-        }else {
-            myHeader = require( `../../assets/headers/doNotExist.png`)
+        if (myHeaderName) {
+            myHeader = require(`../../assets/headers/${myHeaderName}.png`)
+        } else {
+            myHeader = require(`../../assets/headers/doNotExist.png`)
         }
 
         return (
             <div id='chat-page'>
                 <NavBar
-                    icon={<Icon type='left'/>}
-                    onLeftClick={() => {this.props.history.goBack()}}
+                    icon={<Icon type='left' />}
+                    onLeftClick={() => { this.props.history.goBack() }}
                     className={'sticky-header'}
                 >
                     {username}
                 </NavBar>
-                <List style={{marginBottom:45,marginTop:50}}>
+                <List style={{ marginBottom: 45, marginTop: 50 }}>
                     {
                         targetMsgs.map((msg) => {
-                            if (msg.to !== targetId){
-                                return <Item thumb={targetHeader} key ={msg._id}> {msg.content} </Item>
-                            }else {
+                            if (msg.to !== targetId) {
+                                return <Item thumb={targetHeader} key={msg._id}> {msg.content} </Item>
+                            } else {
                                 //  how to add my header?  fix:  use flex-direction: row-reverse
-                                return <Item className='chat-me' thumb={myHeader} key ={msg._id}> {msg.content} </Item>
+                                return <Item className='chat-me' thumb={myHeader} key={msg._id}> {msg.content} </Item>
                             }
                         })
                     }
@@ -140,9 +136,9 @@ class Chat extends Component {
                     <InputItem
                         //clear input after send msg (from state)
                         value={this.state.content}
-                        onFocus={() => {this.setState({isShowIcon: false})}}
+                        onFocus={() => { this.setState({ isShowIcon: false }) }}
                         placeholder="请输入"
-                        onChange = {value => this.setState({content:value})}
+                        onChange={value => this.setState({ content: value })}
                         extra={
                             <span>
                                 <span onClick={this.toggleShowIcon} role='img'> 😃‍ </span>
@@ -159,9 +155,9 @@ class Chat extends Component {
                                 isCarousel={true}
                                 onClick={(Item => {
                                     //todo how to insert a emoji between words？？？
-                                    this.setState({content:this.state.content + Item.text})
+                                    this.setState({ content: this.state.content + Item.text })
                                 })}
-                            />:null
+                            /> : null
                     }
                 </div>
             </div>
@@ -169,7 +165,7 @@ class Chat extends Component {
     }
 }
 export default connect(
-    state => ({user:state.user,chat:state.chat}),
-    {sendMsg,readMsg}
+    state => ({ user: state.user, chat: state.chat }),
+    { sendMsg, readMsg }
 )(Chat)
 

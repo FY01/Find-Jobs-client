@@ -50,7 +50,6 @@
     ]
   },
   "devDependencies": {
-    "antd-mobile": "^2.3.4",
     "babel-plugin-import": "^1.7.0",
     "react-app-rewired": "^1.5.2",
     "redux-devtools-extension": "^2.13.9"

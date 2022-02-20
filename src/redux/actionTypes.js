@@ -1,8 +1,13 @@
-/**
- * @Description:constant:action type
- * @author:
- * @date 2021/7/21
-*/
+/*
+ * @Descripttion: 
+ * @version: 
+ * @@Company: 
+ * @Author: FY01
+ * @Date: 2022-02-20 13:45:24
+ * @LastEditors: 
+ * @LastEditTime: 2022-02-20 14:22:05
+ */
+
 export const AUTH_SUCCESS = 'auth_success'  // register/login success
 
 export const ERROR_MSG = 'error_msg' // error msg: before/after req

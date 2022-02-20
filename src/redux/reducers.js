@@ -1,10 +1,6 @@
-/**
- * @Description: reducers:return new state based on old state and action
- * @author:
- * @date 2021/7/21
-*/
+
 // combine reducers
-import {combineReducers} from "redux";
+import { combineReducers } from "redux";
 import {
     ERROR_MSG,
     AUTH_SUCCESS,
@@ -17,10 +13,10 @@ import {
 import getRedirectTo from "../utils/getRedirectTo";
 
 const initUser = {
-    username:'',
-    type:'',
-    msg:'',
-    redirectTo:''  // redirect to somewhere if AUTH_SUCCESS
+    username: '',
+    type: '',
+    msg: '',
+    redirectTo: ''  // redirect to somewhere if AUTH_SUCCESS
 }
 /**
  * manage user state
@@ -28,17 +24,17 @@ const initUser = {
  * @param action
  * @returns {(*&{msg: string, redirectTo: string, type: string, username: string})|{msg, redirectTo: string, type: string, username: string}|{msg: string, redirectTo: string, type: string, username: string}}
  */
-function user(state = initUser,action){
-    switch (action.type){
+function user(state = initUser, action) {
+    switch (action.type) {
         case AUTH_SUCCESS:
-            const {type,header} = action.data
-            return {...state,...action.data,redirectTo: getRedirectTo(type,header)}
+            const { type, header } = action.data
+            return { ...state, ...action.data, redirectTo: getRedirectTo(type, header) }
         case ERROR_MSG:
-            return {...state,msg:action.data}
+            return { ...state, msg: action.data }
         case RECEIVE_USER:
-            return {...action.data}
+            return { ...action.data }
         case RESET_USER:
-            return {...initUser,msg:action.data}
+            return { ...initUser, msg: action.data }
         default:
             return state
     }
@@ -52,8 +48,8 @@ const initUserList = []
  * @param action
  * @returns {[]|*}
  */
-function userList (state=initUserList,action){
-    switch (action.type){
+function userList(state = initUserList, action) {
+    switch (action.type) {
         case RECEIVE_USER_LIST:
             return action.data  //action.date : [users]
         default:
@@ -62,36 +58,36 @@ function userList (state=initUserList,action){
 }
 
 const initChat = {
-    users:{}, //   all users :   {userId:{}}
-    chatMsgs:[],  // current user chat msg [{}...]
-    unreadCount:0     //current user unread msg
+    users: {}, //   all users :   {userId:{}}
+    chatMsgs: [],  // current user chat msg [{}...]
+    unreadCount: 0     //current user unread msg
 }
 
 
-function chat (state=initChat,action){
-    switch (action.type){
+function chat(state = initChat, action) {
+    switch (action.type) {
         case RECEIVE_MSG_LIST:
-            const {users,chatMsgs,userId} = action.data
-            return{
+            const { users, chatMsgs, userId } = action.data
+            return {
                 users,
                 chatMsgs,
-                unreadCount: chatMsgs.reduce((totalCount,msg) => (totalCount +(!msg.read&&msg.to===userId?1:0)),0)
+                unreadCount: chatMsgs.reduce((totalCount, msg) => (totalCount + (!msg.read && msg.to === userId ? 1 : 0)), 0)
             }
         case RECEIVE_MSG:
-            const {chatMsg} = action.data
+            const { chatMsg } = action.data
             return {
                 users: state.users,
-                chatMsgs: [...state.chatMsgs,chatMsg],
-                unreadCount: state.unreadCount + (!chatMsg.read&&chatMsg.to===action.data.userId?1:0)
+                chatMsgs: [...state.chatMsgs, chatMsg],
+                unreadCount: state.unreadCount + (!chatMsg.read && chatMsg.to === action.data.userId ? 1 : 0)
             }
         case UPDATE_READ_MSG:
-            const {from, to, updateCount} = action.data
+            const { from, to, updateCount } = action.data
             return {
                 users: state.users,
                 chatMsgs: state.chatMsgs.map(msg => {
-                    if (msg.to === to && msg.from === from && !msg.read){
-                        return {...msg,read:true}
-                    }else {
+                    if (msg.to === to && msg.from === from && !msg.read) {
+                        return { ...msg, read: true }
+                    } else {
                         return msg
                     }
                 }),

@@ -1,10 +1,15 @@
-/**
- * @Description: complete assassin's information
- * @author:
- * @date 2021/7/23
-*/
-import React, {Component} from 'react';
-import {connect} from "react-redux";
+/*
+ * @Descripttion: 
+ * @version: 
+ * @@Company: 
+ * @Author: FY01
+ * @Date: 2022-02-20 13:45:24
+ * @LastEditors: 
+ * @LastEditTime: 2022-02-20 14:21:19
+ */
+
+import React, { Component } from 'react';
+import { connect } from "react-redux";
 import PropTypes from 'prop-types'
 import {
     List,
@@ -15,12 +20,12 @@ import {
 } from "antd-mobile";
 
 import HeaderSelector from "../../components/headerSelector/HeaderSelector";
-import {updateUser} from "../../redux/actionCreator";
+import { updateUser } from "../../redux/actionCreator";
 
 class LeaderInfo extends Component {
     static propTypes = {
-        user:PropTypes.object.isRequired,
-        updateUser:PropTypes.func.isRequired
+        user: PropTypes.object.isRequired,
+        updateUser: PropTypes.func.isRequired
     }
     state = {
         header: '',
@@ -34,9 +39,9 @@ class LeaderInfo extends Component {
      * @param propName
      * @param val
      */
-    handleChange = (propName,val) => {
+    handleChange = (propName, val) => {
         this.setState({
-            [propName]:val
+            [propName]: val
         })
     }
 
@@ -49,7 +54,7 @@ class LeaderInfo extends Component {
     cancel = () => {
         this.props.history.replace('/personal')
     }
-    setHeader= (header) => {
+    setHeader = (header) => {
         this.setState({
             header
         })
@@ -57,39 +62,39 @@ class LeaderInfo extends Component {
 
     //save state when will mount
     UNSAFE_componentWillMount() {
-        const {user} = this.props
-        const {header,task,info,company,salary} = user
-        if (user){
+        const { user } = this.props
+        const { header, task, info, company, salary } = user
+        if (user) {
             this.setState({
-                header,task,info,company,salary
+                header, task, info, company, salary
             })
         }
     }
 
     render() {
-        const {header,task,info,company,salary} = this.state
+        const { header, task, info, company, salary } = this.state
 
         return (
             <List>
                 <NavBar>完 善 首 领 信 息</NavBar>
                 <WingBlank>
-                    <HeaderSelector setHeader = {this.setHeader} header = {header}/>
-                    <WhiteSpace/><WhiteSpace/><WhiteSpace/><WhiteSpace/>
-                    <InputItem placeholder={'请发布任务'} value={task} onChange={(val)=>{this.handleChange('task',val)}}>发布任务:</InputItem>
-                    <WhiteSpace/>
-                    <InputItem placeholder={'请输入组织名称'} value = {company} onChange={(val)=>{this.handleChange('company',val)}}>组织名称:</InputItem>
-                    <WhiteSpace/>
-                    <InputItem placeholder={'请输入赏金金额'} value = {salary} onChange={(val)=>{this.handleChange('salary',val)}}>赏金金额:</InputItem>
-                    <WhiteSpace/>
+                    <HeaderSelector setHeader={this.setHeader} header={header} />
+                    <WhiteSpace /><WhiteSpace /><WhiteSpace /><WhiteSpace />
+                    <InputItem placeholder={'请发布任务'} value={task} onChange={(val) => { this.handleChange('task', val) }}>发布任务:</InputItem>
+                    <WhiteSpace />
+                    <InputItem placeholder={'请输入组织名称'} value={company} onChange={(val) => { this.handleChange('company', val) }}>组织名称:</InputItem>
+                    <WhiteSpace />
+                    <InputItem placeholder={'请输入赏金金额'} value={salary} onChange={(val) => { this.handleChange('salary', val) }}>赏金金额:</InputItem>
+                    <WhiteSpace />
                     <TextareaItem
                         title={'任务要求:'}
                         value={info}
                         rows={3}
-                        onChange={(val)=>{this.handleChange('info',val)}}
+                        onChange={(val) => { this.handleChange('info', val) }}
                     >
                     </TextareaItem>
                     <Button type={'ghost'} onClick={this.cancel}>取消修改</Button>
-                    <WhiteSpace/>
+                    <WhiteSpace />
                     <Button type={'primary'} onClick={this.save}>保存</Button>
                 </WingBlank>
             </List>
@@ -97,7 +102,7 @@ class LeaderInfo extends Component {
     }
 }
 export default connect(
-    state => ({user:state.user}),
-    {updateUser}
+    state => ({ user: state.user }),
+    { updateUser }
 )(LeaderInfo)
 
