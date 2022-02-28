@@ -22,26 +22,26 @@ import {
     reqReadMsg
 } from "../api";
 
-//async authSuccess action
+// authSuccess action
 const authSuccess = (user) => ({ type: AUTH_SUCCESS, data: user })
-//async errorMsg action
+// errorMsg action
 const errorMsg = (msg) => ({ type: ERROR_MSG, data: msg })
 
-//async receiveUser action
+// receiveUser action
 const receiveUser = (user) => ({ type: RECEIVE_USER, data: user })
-//async resetUser action
+// resetUser action
 export const resetUser = (msg) => ({ type: RESET_USER, data: msg })
 
-//async receiveUserList action
+// receiveUserList action
 const receiveUserList = (userList) => ({ type: RECEIVE_USER_LIST, data: userList })
 
-//async receiveMsgList action
+// receiveMsgList action
 const receiveMsgList = (users, chatMsgs, userId) => ({ type: RECEIVE_MSG_LIST, data: { users, chatMsgs, userId } })
 
-//async receiveMsg action
+// receiveMsg action
 const receiveMsg = (chatMsg, userId) => ({ type: RECEIVE_MSG, data: { chatMsg, userId } })
 
-//async updateReadMsg action
+// updateReadMsg action
 const updateReadMsg = (from, to, updateCount) => ({ type: UPDATE_READ_MSG, data: { from, to, updateCount } })
 
 
@@ -108,7 +108,7 @@ async function getChatList(userId, dispatch) {
 
 
 /**
- * sync register action
+ *  register action
  * @param user
  * @returns {{data, type: string}|(function(*): Promise<void>)}
  */
@@ -136,7 +136,7 @@ export const register = (user) => {
     }
 }
 /**
- * sync login action
+ *  login action
  * @param user
  * @returns {{data, type: string}|(function(*): Promise<void>)}
  */
@@ -162,7 +162,7 @@ export const login = (user) => {
     }
 }
 /**
- * sync update user action
+ *  update user action
  * @param user
  * @returns {function(*): Promise<void>}
  */
@@ -178,7 +178,7 @@ export const updateUser = (user) => {
     }
 }
 /**
- * sync get user action
+ *  get user action
  * @returns {function(*): Promise<void>}
  */
 export const getUser = () => {
@@ -195,7 +195,7 @@ export const getUser = () => {
     }
 }
 /**
- * sync get user list action
+ *  get user list action
  * @param type
  * @returns {function(*): Promise<void>}
  */
