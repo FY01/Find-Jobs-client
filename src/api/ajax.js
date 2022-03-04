@@ -1,6 +1,17 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @@Company: 
+ * @Author: FY01
+ * @Date: 2022-03-01 22:17:40
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-03-02 20:22:24
+ */
 
 
 import axios from 'axios'
+// 服务器地址
+// const baseUrl = 'http://120.77.232.204:80'
 const baseUrl = ''
 /**
  *
