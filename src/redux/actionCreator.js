@@ -53,7 +53,7 @@ const updateReadMsg = (from, to, updateCount) => ({ type: UPDATE_READ_MSG, data:
  */
 function initIo(userId, dispatch) {
     if (!io.socket) {
-        io.socket = io('ws://localhost:4000')
+        io.socket = io('ws://120.77.232.204:80')
         io.socket.on('receiveMsg', (chatMsg) => {
             console.log('浏览器接收到的消息', chatMsg)
             if (userId === chatMsg.from || userId === chatMsg.to) {
